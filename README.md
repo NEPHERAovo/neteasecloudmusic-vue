@@ -6,6 +6,23 @@
 
 使用前需要启动网易云NodeJS后端API，默认地址为localhost:3000
 
+## 界面展示 ⭐
+
+
+![](ui/7.jpg)
+
+![](ui/1.jpg)
+
+![](ui/2.jpg)
+
+![](ui/3.jpg)
+
+![](ui/4.jpg)
+
+![](ui/5.jpg)
+
+![](ui/6.jpg)
+
 ## 项目结构
 
 ### /public
