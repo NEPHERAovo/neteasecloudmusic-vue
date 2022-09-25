@@ -19,6 +19,13 @@ export function get_playlists() {
     })
 }
 
+export function get_myplaylists(uid) {
+    return service({
+        method: "GET",
+        url: "/user/playlist?uid=" + uid
+    })
+}
+
 export function get_playlist_info(id) {
     return service({
         method: "GET",
@@ -50,6 +57,28 @@ export function get_search_result(keywords, type) {
 export function login_via_phone(phone, password) {
     return service({
         method: "GET",
-        url: "/login/cellphone?phone=" + phone + "&password=" + password
+        url: "/login/cellphone",
+        params: { phone: phone, password: password }
+    })
+}
+
+export function check_login_status() {
+    return service({
+        method: "GET",
+        url: "/login/status"
+    })
+}
+
+export function get_user_info() {
+    return service({
+        method: "GET",
+        url: "/user/account"
+    })
+}
+
+export function logout() {
+    return service({
+        method: "GET",
+        url: "/logout"
     })
 }

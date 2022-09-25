@@ -7,8 +7,9 @@
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
     },
+    "jsx": "preserve",
     "lib": [
       "esnext",
       "dom",

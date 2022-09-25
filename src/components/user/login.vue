@@ -25,13 +25,14 @@
 <script>
 import { ref } from 'vue'
 import _store from '@/store'
+import router from '@/router';
 export default {
     setup() {
         const tel = ref('');
         const password = ref('')
         async function login_func() {
             let res = await _store.dispatch('login_func', { tel: tel.value, password: password.value });
-            console.log(res);
+            router.push('/user');
         }
         return {
             tel,

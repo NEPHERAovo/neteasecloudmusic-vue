@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { login_via_phone } from '@/requests/request';
+import { login_via_phone, check_login_status, logout } from '@/requests/request';
 
 export default createStore({
   state: {
@@ -19,7 +19,10 @@ export default createStore({
     current_progress_change: 1,
     duration_ori: 0,
     is_login: false,
-    show_footer: true
+    show_footer: true,
+    cookie: '',
+    token: '',
+    userid: '',
   },
   getters: {
   },
@@ -115,8 +118,36 @@ export default createStore({
     }
   },
   actions: {
-    login_func: async function (phone, password) {
-      return await login_via_phone(phone, password);
+    login_func: async function (state, data) {
+      let res = await login_via_phone(data.tel, data.password);
+      res = res.data;
+      if (res.code == 200) {
+        this.state.is_login = true;
+        this.state.cookie = res.cookie;
+        this.state.token = res.token;
+        localStorage.setItem('user_cookie', res.cookie);
+        localStorage.setItem('user_token', res.token);
+        this.dispatch('check_login');
+      }
+    },
+    check_login: async function (state) {
+      let data = await check_login_status();
+      data = data.data.data;
+      if (data.code == 200 && data.profile != null) {
+        this.state.is_login = true;
+        this.state.userid = data.profile.userId;
+        // state.cookie = localStorage.getItem('user_cookie');
+        // state.token = localStorage.getItem('user_token');
+      }
+    },
+    logout: async function (state) {
+      let data = await logout();
+      data = data.data;
+      if (data.code == 200) {
+        this.state.is_login = false;
+        localStorage.removeItem('user_cookie');
+        localStorage.removeItem('user_token');
+      }
     }
   },
   modules: {

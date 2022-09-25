@@ -1,14 +1,14 @@
 <template>
-    <div class="playlist">
+    <div v-if="playlists_info.status" class="playlist">
         <div class="playlist_title">
-            <span class="playlist_title_text">推荐歌单</span>
+            <span class="playlist_title_text">收藏歌单</span>
             <!-- <span class="playlist_title_more">更多</span> -->
         </div>
         <div class="playlist_list">
             <van-swipe :loop="false" :width="133" class="playlist_swipe" :show-indicators="false">
                 <van-swipe-item v-for="playlist in playlists_info.data">
                     <router-link :to="{path:'/playlist',query:{id:playlist.id}}">
-                        <img :src="playlist.picUrl" />
+                        <img :src="playlist.coverImgUrl" />
                         <span class="playlist_count">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-24gl-play"></use>
@@ -24,18 +24,23 @@
 </template>
 
 <script>
-import { get_playlists } from '@/requests/request.js'
+import { get_myplaylists } from '@/requests/request.js'
+import store from '@/store';
 import { onMounted, reactive } from 'vue'
 export default {
     setup() {
-        const playlists_info = reactive({ data: [''] });
+        const playlists_info = reactive({ data: [''], status: false });
         onMounted(async () => {
-            let res = await get_playlists();
-            playlists_info.data = res.data.result;
+            await store.dispatch('check_login');
+            playlists_info.status = store.state.is_login;
+            // console.log(store.state.userid);
+            let res = await get_myplaylists(store.state.userid);
+            // console.log(res);
+            playlists_info.data = res.data.playlist;
             for (let i = 0; i < playlists_info.data.length; i++) {
                 if (playlists_info.data[i].playCount >= 100000000) {
                     playlists_info.data[i].playCount = (playlists_info.data[i].playCount / 100000000).toFixed(1) + '亿';
-                } else {
+                } else if (playlists_info.data[i].playCount >= 10000) {
                     playlists_info.data[i].playCount = (playlists_info.data[i].playCount / 10000).toFixed(1) + '万';
                 }
             }
@@ -45,8 +50,8 @@ export default {
     }
 }
 </script>
-
-<style lang="less">
+    
+<style lang="less" scoped>
 .playlist {
     padding: 0.2rem;
     padding-top: 0.1rem;

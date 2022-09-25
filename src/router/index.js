@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import $store from '@/store/index.js'
-import store from '@/store/index.js';
 
 const routes = [
   {
@@ -25,18 +24,29 @@ const routes = [
   {
     path: '/login',
     name: 'login',
+    beforeEnter: async (to, from, next) => {
+      await $store.dispatch('check_login');
+      if ($store._state.data.is_login == false) {
+        next();
+      } else {
+        next('/');
+      }
+    },
     component: () => import('../components/user/login.vue')
   },
   {
     path: '/user',
     name: 'user',
-    beforeEnter: (to, from, next) => {
-      if ($store.state.is_login == 'true') {
+    beforeEnter: async (to, from, next) => {
+      await $store.dispatch('check_login');
+      // console.log($store);
+      if ($store._state.data.is_login == true) {
         next();
       } else {
         next('/login');
       }
-    }
+    },
+    component: () => import('../components/user/user.vue')
   }
   // {
   //   path: '/playlist',

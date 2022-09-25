@@ -83,7 +83,7 @@ export default {
     width: 100%;
     height: 100%;
     margin-top: 0.3rem;
-    border-radius: 0.6rem;
+    border-radius: 0.35rem;
     background-color: white;
 
     // position: sticky;

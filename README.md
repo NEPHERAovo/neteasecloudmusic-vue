@@ -62,6 +62,8 @@ main_search.vue --> 全局搜索（目前实现歌曲/专辑/歌手/用户搜索
 #### /user
 
 login.vue --> 登陆页面（暂时无法登录，code400
+*update : fixed
+user.vue --> 用户页面（可以退出登陆
 
 ### /requests
 
